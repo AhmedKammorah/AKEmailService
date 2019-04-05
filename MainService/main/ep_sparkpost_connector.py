@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:24:11
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-05 19:12:18
+# @Last Modified time: 2019-04-05 19:20:40
 
 SPARTPOST_API_KEY = "45b036dbdb872be184355255c0e81293ecd94a12"
 EMAIL_SERVICE_COMPONENT_NAME = "Transmissions API"

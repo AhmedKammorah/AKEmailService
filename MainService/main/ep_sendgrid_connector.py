@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:23:35
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-05 19:10:58
+# @Last Modified time: 2019-04-05 19:22:08
 
 SENDGRID_API_KEY = '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'
 SERVICE_STATUS_URL = "http://status.sendgrid.com/api/v2/summary.json"
@@ -12,11 +12,11 @@ EMAIL_SERVICE_COMPONENT_NAME = "Mail Sending" #"API v3"
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from email_provider_connector import EmailProviderConnector, RESPONSE_STATE
 
 import requests
 from pprint import pprint
 
+from MainService.main.email_provider_connector import EmailProviderConnector, RESPONSE_STATE
 
 class EPSendGridConnector(EmailProviderConnector):
 
@@ -52,8 +52,8 @@ class EPSendGridConnector(EmailProviderConnector):
         if response.status_code >= 200 and response.status_code < 300:
             ser_components = response.json().get('components', [])
             comps = list(filter(lambda e: e.get('name', None) == EMAIL_SERVICE_COMPONENT_NAME, ser_components))
-            if len(comps) > 1
-                pprint(comps)
+            if len(comps) >= 1:
+                # pprint(comps)
                 comp = comps[0]
                 if comp.get('status', None) == 'operational':
                     return True
