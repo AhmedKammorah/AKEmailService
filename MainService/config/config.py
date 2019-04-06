@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-05 13:06:43
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:09:07
+# @Last Modified time: 2019-04-06 14:17:11
 
 import os
 
@@ -19,10 +19,7 @@ TSCORE_PASSWORD = ''
 REDIS_HOST = "ak-redis"
 REDIS_PORT = 6379
 
-# print os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-print (__file__)
-print(os.path.realpath(__file__))
-print()
+
 import yaml
 current_dir = os.path.dirname(__file__)
 connector_config_file_name = 'conectors_conf.yaml'

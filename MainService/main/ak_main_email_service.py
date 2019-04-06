@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 15:54:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:55:13
+# @Last Modified time: 2019-04-06 17:45:07
 
 from enum import Enum 
 
@@ -15,6 +15,10 @@ from MainService.main.ak_ep_services import AKEmailServices, AKProviderService,S
 
 class EmailMessage(object):
     def __init__(self, to_emails, from_email, subject, body):
+        if to_emails == None or from_email == None:
+            return None
+        if len(to_emails) == 0 or len(from_email) == 0:
+            return None 
         self._to_emails = to_emails
         self._from_email = from_email
         self._subject = subject
@@ -65,7 +69,7 @@ class AKMainEmailService(AKEmailServices):
         logger.error("No Service Provider is up right now")
         return None
 
-    def send_email(self, email_message):
+    def send_email(self, email_message:EmailMessage):
         """ Sending Email messgae by picking the first avaliblae running email service Provider
         
         Args: 
@@ -73,6 +77,9 @@ class AKMainEmailService(AKEmailServices):
         Returns: 
             response to user
         """
+        if email_message == None:
+            logger.error("Can't send Empty or null Email")
+            return 
         logger.info('Start the process of Sending Eamil  email_message')
         email_ser = self._pick_service()
         if email_ser == None:
