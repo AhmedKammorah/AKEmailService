@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package AKEmailServiceRPC;
+
+service AKEmailServiceRPC{
+    rpc send_email (EmailMessageRequest) returns (RersponseMsg);
+}
+
+message EmailMessageRequest{
+    string from_email = 1;
+    string subject = 2;
+    string body = 3;
+    repeated string to_emails = 4;
+}
+message RersponseMsg{
+    string status = 1;
+    string message = 2;
+}
