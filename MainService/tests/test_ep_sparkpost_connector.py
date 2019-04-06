@@ -2,9 +2,9 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-05 19:09:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-05 19:24:37
+# @Last Modified time: 2019-04-06 14:04:39
 import unittest
-from MainService.main.ep_sendgrid_connector import EPSendGridConnector
+from MainService.main.ep_sparkpost_connector import EPSparkPostConnector
 
 
 MOCK_MESSAGE = {
@@ -15,13 +15,13 @@ MOCK_MESSAGE = {
         }
 
 class TestEPSendGridConnector(unittest.TestCase):
-
+    def setUp(self):
+        self.ep_spost = EPSparkPostConnector()
     def test_send_email(self):
-
         pass
 
     def test_health_check(self):
-        pass
+        self.assertTrue(self.ep_spost.health_check())
 
 
 if __name__ == "__main__":

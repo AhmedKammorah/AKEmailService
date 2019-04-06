@@ -2,12 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:23:35
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-05 19:22:08
-
-SENDGRID_API_KEY = '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'
-SERVICE_STATUS_URL = "http://status.sendgrid.com/api/v2/summary.json"
-
-EMAIL_SERVICE_COMPONENT_NAME = "Mail Sending" #"API v3"
+# @Last Modified time: 2019-04-06 13:33:40
 
 import os
 from sendgrid import SendGridAPIClient
@@ -18,17 +13,31 @@ from pprint import pprint
 
 from MainService.main.email_provider_connector import EmailProviderConnector, RESPONSE_STATE
 
+from MainService.config.config import conector_config
 class EPSendGridConnector(EmailProviderConnector):
+    """SendGrid Email service Connector 
+       
+       Attributes:
+           config: The config and settings related to SendGrid provider
+           sparky: instance of SendGrid client
+    """
 
     def __init__(self):
-        self.sg = SendGridAPIClient(SENDGRID_API_KEY)
+       """Initalize the connector class with config and client instance"""
+       self.config = conector_config.get('sendgrid', {})
+       self.sg = SendGridAPIClient(self.config['API_KEY'])
 
-    def send_email(self, message):
+    def send_email(self, email_message):
         """ Sending Email message by sendgrid service 
 
         Args:
             message: Full message 
         """
+        message = Mail(
+                from_email=email_message.from_email,
+                to_emails=email_message.to_emails,
+                subject=email_message.subject,
+                html_content=email_message.body)
         try:
             response = self.sg.send(message)
             print(response.status_code)
@@ -38,17 +47,19 @@ class EPSendGridConnector(EmailProviderConnector):
                 return RESPONSE_STATE.SERVICE_ERROR, response
             elif response.status_code == 429:
                 return RESPONSE_STATE.OVERRATE_ERROR, response
-            elif response.status_code >= 400 and response.status_code < 500:
+            elif response.status_code in [413, 415]:
                 return RESPONSE_STATE.USER_ERROR, response
+            elif response.status_code >= 400 and response.status_code < 500:
+                return RESPONSE_STATE.REQUEST_ERRORs, response
         except Exception as e:
             print(e.message)
         return RESPONSE_STATE.OTHER_ERROR, response
     
     def health_check(self):
-        """ Checking the health of the email conponent in sendgrid service 
-        """
-        url = SERVICE_STATUS_URL
-        response = requests.request("GET", url)
+        """ Checking the health of the email conponent in sendgrid service """
+        url = self.config['STATUS_URL']
+        EMAIL_SERVICE_COMPONENT_NAME = self.config['COMPONENT_NAME']
+        response = requests.get(url)
         if response.status_code >= 200 and response.status_code < 300:
             ser_components = response.json().get('components', [])
             comps = list(filter(lambda e: e.get('name', None) == EMAIL_SERVICE_COMPONENT_NAME, ser_components))
