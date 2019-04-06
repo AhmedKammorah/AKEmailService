@@ -2,9 +2,9 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-05 23:37:23
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 00:40:28
+# @Last Modified time: 2019-04-06 14:14:46
 import unittest
-from MainService.main.AKEmailService import AKProviderService
+from MainService.main.ak_main_email_service import AKProviderService
 
 class TESTAKProviderService(unittest.TestCase):
     @classmethod

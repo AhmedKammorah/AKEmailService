@@ -2,9 +2,9 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-06 00:45:19
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 00:54:37
+# @Last Modified time: 2019-04-06 14:14:27
 import unittest
-from MainService.main.AKEmailService import EmailMessage
+from MainService.main.ak_main_email_service import EmailMessage
 
 MOCK_MESSAGE = {
             'from_email':'ahmedkammorah@xyz.com',
