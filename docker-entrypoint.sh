@@ -17,9 +17,9 @@ tail -n 0 -f /ak/logs/gunicorn/*.log &
 
 # Start Gunicorn processes
 echo Starting Gunicorn.
-cd /app    #  or exec gunicorn MainApp.AKAppMain:app
+cd /app    #  or exec gunicorn MainApp.ak_app_main:app
 
-exec gunicorn MainService.api.AKAppMain:app \
+exec gunicorn MainService.api.ak_app_main:app \
     --name AKAppMain \
     --bind 0.0.0.0:5000 \
     --workers 3 \

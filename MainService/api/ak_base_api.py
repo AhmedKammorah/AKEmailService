@@ -2,15 +2,15 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-06 18:18:53
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 02:11:04
+# @Last Modified time: 2019-04-08 14:01:48
 
 from flask import Flask
 from flask import request
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 
-from MainService.api.AKAPP import app, swag_from
-from MainService.api.AKAuth import jwt, JWT, jwt_required, current_identity, safe_str_cmp,authenticate
+from MainService.api.ak_app import app, swag_from
+from MainService.api.ak_auth import jwt, JWT, jwt_required, current_identity, safe_str_cmp,authenticate
 
 
 def _getUserId():

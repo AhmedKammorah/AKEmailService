@@ -2,18 +2,18 @@
 # @Author: ahmedkammorah
 # @Date:   2017-01-21 23:51:34
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 02:22:03
+# @Last Modified time: 2019-04-08 14:20:19
 
 '''
     TS Custom JWT Auth 
     This work by JWT Config
     and API secrit  
 '''
-
+import hashlib
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 
-from MainService.api.AKAPP import app, MAIN_DEFAULT_USER
+from MainService.api.ak_app import app, MAIN_DEFAULT_USER
 
 class User(object):
     def __init__(self, id, username, password):
@@ -30,7 +30,10 @@ def authenticate(username, password):
     '''
     print('authenticate')
     user = MainUser
-    if user and safe_str_cmp(user.password.encode('utf-8'), password.encode('utf-8')):
+    if password == None or len(password) == 0:
+        return "password can't be null"
+    user_pass_hash = hashlib.sha224(password.encode()).hexdigest()
+    if user and user_pass_hash == user.password:
         return user
     return 'No User matches'
 
