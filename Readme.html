@@ -1056,14 +1056,18 @@ body .markdown-body
 .codehilite .il{color:#009999}
 .codehilite .gc{color:#999;background-color:#EAF2F5}
 </style><title>Readme</title></head><body><article class="markdown-body"><h1 id="akemailservice">AKEmailService<a class="headerlink" href="#akemailservice" title="Permanent link"></a></h1>
-<ul>
-<li>including <ul>
-<li>docker</li>
-<li>backend service
-Email Service</li>
-</ul>
-</li>
-</ul>
+<p>Email Service</p>
+<p>Description of the problem and solution.
+Whether the solution focuses on back-end, front-end or if it&rsquo;s full stack.</p>
+<p>Reasoning behind your technical choices, including architectural.
+Trade-offs you might have made, anything you left out, or what you might do 
+differently if you were to spend additional time on the project.</p>
+<h1 id="the-problem">The Problem<a class="headerlink" href="#the-problem" title="Permanent link"></a></h1>
+<h1 id="the-solution">The Solution<a class="headerlink" href="#the-solution" title="Permanent link"></a></h1>
+<div class="codehilite"><pre>Backend Service with it&#39;s API docs and clients
+</pre></div>
+
+
 <h2 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link"></a></h2>
 <ul>
 <li>Is there any periority of using the service ?</li>
@@ -1076,6 +1080,32 @@ Email Service</li>
 </ul>
 </li>
 </ul>
+<h2 id="high-level-architecture">High level architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link"></a></h2>
+<p><img alt="High level architecture" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/AkEmailService.png" /></p>
+<h2 id="alternative">Alternative<a class="headerlink" href="#alternative" title="Permanent link"></a></h2>
+<h2 id="what-next">What Next<a class="headerlink" href="#what-next" title="Permanent link"></a></h2>
+<h2 id="components">Components<a class="headerlink" href="#components" title="Permanent link"></a></h2>
+<ol>
+<li>Email Provider Connectors <ol>
+<li>sendgrid connector</li>
+<li>sparkposr connector</li>
+</ol>
+</li>
+<li>Main Email Service </li>
+<li>Health check Service </li>
+<li>Rest API Service </li>
+<li>RPC Service Server/client</li>
+<li>some tests</li>
+<li>API docs</li>
+<li>Docker/Docker-compose and running scripts</li>
+</ol>
+<h3 id="email-providers">Email Providers<a class="headerlink" href="#email-providers" title="Permanent link"></a></h3>
+<div class="codehilite"><pre>* sendgrid
+* sparkpost
+</pre></div>
+
+
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h1>
 <h2 id="steps">steps<a class="headerlink" href="#steps" title="Permanent link"></a></h2>
 <ul>
 <li>build docker image </li>
@@ -1094,17 +1124,28 @@ Email Service</li>
 </li>
 <li>Use RPC client</li>
 </ul>
-<h2 id="high-level-architecture">High level architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link"></a></h2>
-<p><img alt="High level architecture" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/AkEmailService.png" /></p>
-<h3 id="email-providers">Email Providers<a class="headerlink" href="#email-providers" title="Permanent link"></a></h3>
-<div class="codehilite"><pre>* sendgrid
-* sparkpost
-</pre></div>
-
-
 <h2 id="init">Init<a class="headerlink" href="#init" title="Permanent link"></a></h2>
-<h2 id="config">config<a class="headerlink" href="#config" title="Permanent link"></a></h2>
-<h3 id="email-providers-connectors">Email Providers connectors<a class="headerlink" href="#email-providers-connectors" title="Permanent link"></a></h3>
+<ul>
+<li>clone this repo</li>
+<li>Code Dir Tree
+    <div class="codehilite"><pre>./
+    MainService/    &lt;Your main Flask  code dir&gt; 
+    Readme.md
+    docker-entrypoint.sh
+    ..
+</pre></div></li>
+</ul>
+<h2 id="config">Config<a class="headerlink" href="#config" title="Permanent link"></a></h2>
+<h4 id="env-variable">Env Variable<a class="headerlink" href="#env-variable" title="Permanent link"></a></h4>
+<p>create file ak_variables.env
+OR just add my ak_variables.env which i sent 
+<div class="codehilite"><pre>AK_APP_ENV=&lt;pro  or dev&gt;
+BASE_HOST=&lt;HOSTIP OR local host&gt;
+SENDGRID_API_KEY=&lt;YOUR_API_KEY&gt;
+SPARKPOST_API_KEY=&lt;YOUR_API_KEY&gt;
+AK_API_JWT_SECRET_KEY=&lt;Choose SECRET Key to used to auth and generate JWT Token&gt;
+</pre></div></p>
+<h4 id="email-providers-connectors">Email Providers connectors<a class="headerlink" href="#email-providers-connectors" title="Permanent link"></a></h4>
 <div class="codehilite"><pre>    sendgrid:
         API_KEY: &quot;&lt;YOUR_API_KEY&gt;&quot;
         STATUS_URL: &quot;http://status.sendgrid.com/api/v2/summary.json&quot;
@@ -1128,37 +1169,70 @@ Email Service</li>
     * REDIS_PORT = 6379
 * Python 3.X
 * pip and python requirements in requirements.txt
+    ```
+        pip install --no-cache-dir -r requirements.txt
+    ```
 * Run each service separately
 </pre></div>
 
 
-<h2 id="code-dir-tree">Code Dir Tree<a class="headerlink" href="#code-dir-tree" title="Permanent link"></a></h2>
-<div class="codehilite"><pre>./
-    MainService/    &lt;Your main Flask  code dir&gt; 
-    Readme.md
-    docker-entrypoint.sh
-    ..
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link"></a></h2>
+<ul>
+<li>Build The images
+<div class="codehilite"><pre>    cd $PWD
+    sh build_docker_image.sh 
+</pre></div></li>
+<li>OR Pull the image from Docker hub 
+<div class="codehilite"><pre>    cd $PWD
+    docker pull ahmedkammorah/ak_email_service 
+</pre></div></li>
+</ul>
+<h2 id="run">Run<a class="headerlink" href="#run" title="Permanent link"></a></h2>
+<h4 id="start-container-on-dev-mode">Start Container On (Dev Mode)<a class="headerlink" href="#start-container-on-dev-mode" title="Permanent link"></a></h4>
+<div class="codehilite"><pre>    sh run_redis.sh
+    sh run_ak_dev.sh
 </pre></div>
 
+<h4 id="start-container-on-pro-mode">Start Container On (Pro Mode)<a class="headerlink" href="#start-container-on-pro-mode" title="Permanent link"></a></h4>
+<div class="codehilite"><pre>    docker-compose up
+</pre></div>
 
-<h2 id="getting-start">Getting Start<a class="headerlink" href="#getting-start" title="Permanent link"></a></h2>
+<h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link"></a></h2>
+<h3 id="services-are-depoyed-on-aws">Services are depoyed on AWS<a class="headerlink" href="#services-are-depoyed-on-aws" title="Permanent link"></a></h3>
 <ul>
-<li>
-<p>clone this repo</p>
+<li><a href="http://13.58.165.80:5000/apidocs">Main API docs</a></li>
+</ul>
+<h2 id="use-the-demo">Use The Demo<a class="headerlink" href="#use-the-demo" title="Permanent link"></a></h2>
+<h3 id="use-rest-api">Use Rest API<a class="headerlink" href="#use-rest-api" title="Permanent link"></a></h3>
+<ul>
+<li>Check The API Doc <ul>
+<li><a href="http://13.58.165.80:5000/apidocs">Swagger API docs</a></li>
+</ul>
 </li>
-<li>
-<p>Build The images
-<div class="codehilite"><pre>    cd $PWD
-
-    sh build_docker_image.sh 
-</pre></div></p>
-</li>
-<li>
-<p>Start Container On Dev Mode 
-<div class="codehilite"><pre>    sh run_ak_dev.sh
-</pre></div></p>
+<li>Start Login to get the JWT Token to be able to user the send API Endpoint<ul>
+<li><a href="http://13.58.165.80:5000/apidocs/#/AKAuth">Auth Endpoint  /api/auth </a><ul>
+<li>username: &lt;Main user name></li>
+<li>password: &lt;Main Password></li>
+</ul>
 </li>
 </ul>
-<h4 id="start-container-on-pro-mode">Start Container On Pro Mode<a class="headerlink" href="#start-container-on-pro-mode" title="Permanent link"></a></h4>
-<div class="codehilite"><pre>    docker-compose up
-</pre></div></article></body></html>
+</li>
+<li>Test the token on the protected endpoint<ul>
+<li><a href="http://13.58.165.80:5000/apidocs/#/AKAuth/get_api_protected">Protected test Endpoint /api/protected</a></li>
+</ul>
+</li>
+<li>Use the send Eamil endpoint<ul>
+<li><a href="http://13.58.165.80:5000/apidocs/#/AKEmailServiceAPI/sendEmail">Send Email Endpoint /api/email [POST]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="use-rpc-client">Use RPC client<a class="headerlink" href="#use-rpc-client" title="Permanent link"></a></h3>
+<h1 id="author">Author<a class="headerlink" href="#author" title="Permanent link"></a></h1>
+<ul>
+<li>Ahmed Kammroah <ul>
+<li><a href="https://github.com/AhmedKammorah">ahmedkammorah</a> </li>
+<li><a href="https://github.com/AhmedKammorah/my_resume_latex">resume</a></li>
+<li><a href="https://www.linkedin.com/in/ahmedkammorah/">LinkedIn</a></li>
+</ul>
+</li>
+</ul></article></body></html>
