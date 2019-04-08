@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  ak-redis:
+    image: redis
+    restart: on-failure
+    # ports:
+    #   - "8223:8223"
+  ak_email_service_rest:
+    # tty: true   # for development mode because use bash as my command to not exit
+    image: ahmedkammorah/ak_service
+    command: sh docker-entrypoint.sh
+    restart: on-failure
+    volumes:
+      - .:/app
+      - /ak:/ak 
+    ports:
+      - "5000:5000"
+    depends_on:
+      - ak-redis
+  ak_email_service_rpc:
+    image: ahmedkammorah/ak_service
+    command: python /app/MainService/rpc/ak_email_service_server.py 
+    restart: on-failure
+    volumes:
+      - .:/app
+      - /ak:/ak 
+    ports:
+      - "50051:50051"
+    depends_on:
+      - ak-redis
+  ak_email_service_health_check:
+    image: ahmedkammorah/ak_service
+    command: python /app/MainService/main/ak_health_check_service.py 
+    restart: on-failure
+    volumes:
+      - .:/app
+      - /ak:/ak 
+    depends_on:
+      - ak-redis
