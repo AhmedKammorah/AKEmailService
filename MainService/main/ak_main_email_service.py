@@ -2,16 +2,13 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 15:54:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-07 00:55:44
+# @Last Modified time: 2019-04-08 20:40:39
 
 from enum import Enum 
 
 
 from MainService.main.email_provider_connector import RESPONSE_STATE
 from MainService.main.ak_ep_services import AKEmailServices, AKProviderService,SERVICE_STATUS, logger
-
-
-
 
 class EmailMessage(object):
     def __init__(self, to_emails, from_email, subject, body):

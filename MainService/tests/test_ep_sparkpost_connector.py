@@ -2,23 +2,25 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-05 19:09:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:04:39
+# @Last Modified time: 2019-04-08 21:19:18
 import unittest
+from MainService.main.ak_main_email_service import EmailMessage
 from MainService.main.ep_sparkpost_connector import EPSparkPostConnector
 
 
 MOCK_MESSAGE = {
-            'from_email':'ahmedkammorah@trendy.com',
-            'to_emails':'ahmedkammorah@gmail.com',
-            'subject':'Sending with SendGrid is Fun',
-            'html_content':'<strong>and easy to do anywhere, even with Python</strong>'
+            'from_email':'ahmedkammorah@kamayalabs.com',
+            'to_emails':['ahmedkammorah@gmail.com'],
+            'subject':'First Email subject',
+            'body':'<strong>First Email body as html</strong>'
         }
 
 class TestEPSendGridConnector(unittest.TestCase):
     def setUp(self):
         self.ep_spost = EPSparkPostConnector()
+        self.msg1 = EmailMessage(to_emails=MOCK_MESSAGE['to_emails'], from_email=MOCK_MESSAGE['from_email'], subject=MOCK_MESSAGE['subject'], body=MOCK_MESSAGE['body'])
     def test_send_email(self):
-        pass
+        self.ep_spost.send_email(self.msg1)
 
     def test_health_check(self):
         self.assertTrue(self.ep_spost.health_check())

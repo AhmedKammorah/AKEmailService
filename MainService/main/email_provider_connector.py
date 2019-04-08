@@ -2,8 +2,10 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:25:23
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 12:52:37
+# @Last Modified time: 2019-04-08 21:06:00
 from enum import Enum
+from MainService.main.AKLogUtil.AKLogUtil import getLogger
+logger = getLogger("EmailConnectors")
 
 class RESPONSE_STATE(Enum):
     OK=1

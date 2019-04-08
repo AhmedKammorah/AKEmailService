@@ -2,12 +2,8 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:24:11
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:07:53
-
-# SPARTPOST_API_KEY = "45b036dbdb872be184355255c0e81293ecd94a12"
-# EMAIL_SERVICE_COMPONENT_NAME = "Transmissions API"
-# SERVICE_STATUS_URL =""
-from MainService.main.email_provider_connector import EmailProviderConnector
+# @Last Modified time: 2019-04-08 21:24:52
+from MainService.main.email_provider_connector import EmailProviderConnector,logger
 from sparkpost import SparkPost
 import requests
 from MainService.config.config import conector_config
@@ -33,14 +29,15 @@ class EPSparkPostConnector(EmailProviderConnector):
         Args:
             message: Full message 
         """
+        logger.info('Start Sending Email using SparkPost')
         try:
             response = self.sparky.transmissions.send(
                                             use_sandbox = True,
                                             recipients = message.to_emails,
                                             html = message.body,
-                                            from_email = message.from_email,
+                                            from_email = 'ahmedkammorah+1@gmail.com.sink.sparkpostmail.com',
                                             subject = message.subject)
-            print(response.status_code)
+            logger.info('Response form sending email using SparkPost with status_code:{}'.format(response.status_code))
             if response.status_code == 200 or response.status_code == 202:
                 return RESPONSE_STATE.OK, response
             elif response.status_code >= 500:
@@ -55,11 +52,13 @@ class EPSparkPostConnector(EmailProviderConnector):
                 return RESPONSE_STATE.USER_ERROR, response
         except Exception as e:
             print(e.message)
+            logger.error("Error in sending Email with SparkPost error:{}".format(e))
         return RESPONSE_STATE.OTHER_ERROR, response
 
     def health_check(self):
-        """ Checking the health of the email conponent in sendgrid service """
+        """ Checking the health of the email conponent in sparkpost service """
         url = self.config['STATUS_URL']
+        logger.info('Start heartbeat sparkpost service')
         EMAIL_SERVICE_COMPONENT_NAME = self.config['COMPONENT_NAME']
         print(EMAIL_SERVICE_COMPONENT_NAME)
         response = requests.get(url)
@@ -69,6 +68,7 @@ class EPSparkPostConnector(EmailProviderConnector):
             if len(comps) > 0:
                 comp = comps[0]
                 if comp.get('status', None) == 'operational':
+                    logger.info('heartbeat sparkpost service is Up and running')
                     return True
         return False
 
