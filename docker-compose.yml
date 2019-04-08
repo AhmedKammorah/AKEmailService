@@ -7,9 +7,13 @@ services:
     # ports:
     #   - "6379:6379"
   ak_email_service_rest:
-    # tty: true   # for development mode because use bash as my command to not exit
+    # tty: true   # for proelopment mode because use bash as my command to not exit
     image: ahmedkammorah/ak_email_service
     command: sh docker-entrypoint.sh
+    env_file:
+     - ./ak_variables.env
+    environment:
+     - AK_APP_ENV=pro
     restart: on-failure
     volumes:
       # - .:/app
@@ -20,7 +24,11 @@ services:
       - ak-redis
   ak_email_service_rpc:
     image: ahmedkammorah/ak_email_service
-    command: python /app/MainService/rpc/ak_email_service_server.py 
+    command: python /app/MainService/rpc/ak_email_service_server.py
+    env_file:
+     - ./ak_variables.env
+    environment:
+     - AK_APP_ENV=pro 
     restart: on-failure
     volumes:
       # - .:/app
@@ -31,7 +39,11 @@ services:
       - ak-redis
   ak_email_service_health_check:
     image: ahmedkammorah/ak_email_service
-    command: python /app/MainService/main/ak_health_check_service.py 
+    command: python /app/MainService/main/ak_health_check_service.py
+    env_file:
+     - ./ak_variables.env
+    environment:
+     - AK_APP_ENV=pro 
     restart: on-failure
     volumes:
       # - .:/app
