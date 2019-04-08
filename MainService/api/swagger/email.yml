@@ -1,6 +1,4 @@
 ---
-tags:
-- "AKEmailServiceAPI"
 summary: "Send email API Endpoint"
 description: "Send email API Endpoint"
 operationId: "sendEmail"
@@ -20,23 +18,6 @@ parameters:
 responses:
   405:
     description: "Invalid input"
-security:
-# - petstore_auth:
-#   - "write:pets"
-#   - "read:pets"
-# x-swagger-router-controller: "swagger_server.controllers.email_message_controller"
-securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
 definitions:
   EmailMessage:
     type: "object"
@@ -79,6 +60,3 @@ definitions:
         type: "string"
       message:
         type: "string"
-# externalDocs:
-#   description: "Find out more about Swagger"
-#   url: "http://swagger.io"
