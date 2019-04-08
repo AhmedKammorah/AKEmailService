@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:23:35
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 21:06:13
+# @Last Modified time: 2019-04-08 22:07:29
 
 import os
 from sendgrid import SendGridAPIClient
@@ -55,9 +55,9 @@ class EPSendGridConnector(EmailProviderConnector):
             elif response.status_code >= 400 and response.status_code < 500:
                 return RESPONSE_STATE.REQUEST_ERRORs, response
         except Exception as e:
-            print(e.message)
+            # print(e.message)
             logger.error("Error in sending Email with sendgrid error:{}".format(e))
-        return RESPONSE_STATE.OTHER_ERROR, response
+        return RESPONSE_STATE.OTHER_ERROR, None
     
     def health_check(self):
         """ Checking the health of the email conponent in sendgrid service """

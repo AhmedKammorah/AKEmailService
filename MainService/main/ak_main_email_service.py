@@ -2,11 +2,11 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 15:54:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 20:40:39
+# @Last Modified time: 2019-04-08 22:58:45
 
 from enum import Enum 
 
-
+import json
 from MainService.main.email_provider_connector import RESPONSE_STATE
 from MainService.main.ak_ep_services import AKEmailServices, AKProviderService,SERVICE_STATUS, logger
 
@@ -37,7 +37,32 @@ class EmailMessage(object):
     def __str__(self):
         return 'Eamil for subject:{} from_email:{} to_emails:{} \nbody:{}'.format(self.subject, self.from_email, self.to_emails, self.body)
     
+    def build_sparkpost_msg(self):
+        data = {
+              "recipients": [
+              ],
+              "content": {
+                "from": {
+                  "email": "ahmedkammorah@trendship.net",
+                  "name": ""
+                },
 
+                "subject": "",
+                "html": "<html><body> </body></html>",
+                "text": ""
+              }
+            }
+        # data['content']['from']['email'] = self.from_email
+        data['content']['from']['name']  = self.from_email
+        data['content']['subject']  = self.subject
+        data['content']['html']  = self.body
+        data['content']['text']  = self.body
+        for em in self.to_emails:
+            newRec = {
+                 "address": em
+            }
+            data['recipients'].append(newRec)
+        return json.dumps(data)
 class AKMainEmailService(AKEmailServices):
     """The Main Email service Class 
 
