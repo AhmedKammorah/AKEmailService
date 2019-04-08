@@ -1,2 +1,2 @@
 # Build django image
-docker build -t ahmedkammorah/ak_service .
+docker build -t ahmedkammorah/ak_email_service .
