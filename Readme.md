@@ -27,8 +27,12 @@ differently if you were to spend additional time on the project.
 
 ## High level architecture
 
-![High level architecture](AkEmailService.png)
+![High level architecture](static/AkEmailService-1.png)
+
+![Option 1](static/AkEmailService-4.png)
 ## Alternative 
+![Option 1](static/AkEmailService-2.png)
+![Option 2](static/AkEmailService-3.png)
 ## What Next 
 
 ## Components 
