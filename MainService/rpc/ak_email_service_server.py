@@ -2,7 +2,7 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-06 23:39:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-07 00:58:41
+# @Last Modified time: 2019-04-08 02:55:18
 from concurrent import futures
 import time
 import logging
@@ -12,6 +12,7 @@ import grpc
 from ak_email_service_pb2 import RersponseMsg
 import ak_email_service_pb2_grpc
 
+from MainService.config.config import RPC_SERVER, RPC_PORT
 from MainService.main.ak_main_email_service import AKMainEmailService, EmailMessage
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
@@ -31,7 +32,7 @@ class AKEmailServiceRPC(ak_email_service_pb2_grpc.AKEmailServiceRPCServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     ak_email_service_pb2_grpc.add_AKEmailServiceRPCServicer_to_server(AKEmailServiceRPC(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:{}'.format(RPC_PORT))
     server.start()
     try:
         while True:

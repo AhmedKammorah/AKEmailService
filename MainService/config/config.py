@@ -2,24 +2,17 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-05 13:06:43
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:17:11
+# @Last Modified time: 2019-04-08 02:52:54
 
 import os
-
-# AUTH
-AK_API_JWT_SECRET_KEY = ''
-AK_JWT_ALGORITHM = 'HS256'
-
-# RPC Service
-AK_RPC_URI = ''
-TSCORE_USERNAME = ''
-TSCORE_PASSWORD = ''
 
 
 REDIS_HOST = "ak-redis"
 REDIS_PORT = 6379
 
-
+RPC_SERVER = 'localhost'
+RPC_PORT = 50051
+ 
 import yaml
 current_dir = os.path.dirname(__file__)
 connector_config_file_name = 'conectors_conf.yaml'
