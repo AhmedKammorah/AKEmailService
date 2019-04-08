@@ -2,34 +2,24 @@
 # @Author: ahmedkammorah
 # @Date:   2017-01-22 02:45:44
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 19:12:08
+# @Last Modified time: 2019-04-08 02:21:14
 
 import os
 
 # AUTH
-AK_API_JWT_SECRET_KEY = ''
+AK_API_JWT_SECRET_KEY = 'b11c9f7a37ead9e819c9ea09dff158f6'
 AK_JWT_ALGORITHM = 'HS256'
 
 # RPC Service
 AK_RPC_URI = ''
-TSCORE_USERNAME = ''
-TSCORE_PASSWORD = ''
+AK_USERNAME = ''
+AK_PASSWORD = ''
+BASE_HOST = 'localhost'
 
-# if os.environ.get('AK_APP_ENV') == 'pro':
-#     print 'Prodction environment'
-#     # AUTH
-#     AK_API_JWT_SECRET_KEY = ''
-#     AK_JWT_ALGORITHM = 'HS256'
-
-
-# elif os.environ.get('AK_APP_ENV') == 'dev':
-#     print 'development environment'
-#     # AUTH
-#     AK_API_JWT_SECRET_KEY = ''
-#     AK_JWT_ALGORITHM = 'HS256'
-
-
-
+MAIN_DEFAULT_USER = {
+  'username':'ahmed',
+  'password':'ak_mock_p@ssword'
+}
 Swagger_template = {
   "swagger": "2.0",
   "info": {
@@ -44,11 +34,11 @@ Swagger_template = {
     "termsOfService": "http://kammorah.com/terms",
     "version": "0.0.1"
   },
-  "host": "0.0.0.0",  # overrides localhost:500
-  "basePath": "/api",  # base bash for blueprint registration
+  "host": BASE_HOST+":5000",  # overrides localhost:5000
+  "basePath": "/",  # base bash for blueprint registration
   "schemes": [
     "http",
     "https"
   ],
-  "operationId": "getmyData"
+  "operationId": "getmyData"  
 }
