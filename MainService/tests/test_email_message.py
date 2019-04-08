@@ -2,7 +2,7 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-06 00:45:19
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:14:27
+# @Last Modified time: 2019-04-06 17:40:12
 import unittest
 from MainService.main.ak_main_email_service import EmailMessage
 
@@ -24,3 +24,8 @@ class TestEamilMessage(unittest.TestCase):
         self.assertEqual(self.msg1.to_emails, MOCK_MESSAGE['to_emails'])
         self.assertGreater(len(self.msg1.to_emails), 0)
         self.assertListEqual(self.msg1.to_emails, MOCK_MESSAGE['to_emails'])
+
+    # def test_bad_type(self):
+    #     data = "banana"
+    #     with self.assertRaises(TypeError):
+    #         result = sum(data)

@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 15:54:42
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 17:45:07
+# @Last Modified time: 2019-04-07 00:55:44
 
 from enum import Enum 
 
@@ -36,6 +36,9 @@ class EmailMessage(object):
     @property
     def body(self):
         return self._body
+
+    def __str__(self):
+        return 'Eamil for subject:{} from_email:{} to_emails:{} \nbody:{}'.format(self.subject, self.from_email, self.to_emails, self.body)
     
 
 class AKMainEmailService(AKEmailServices):
@@ -79,7 +82,7 @@ class AKMainEmailService(AKEmailServices):
         """
         if email_message == None:
             logger.error("Can't send Empty or null Email")
-            return 
+            return
         logger.info('Start the process of Sending Eamil  email_message')
         email_ser = self._pick_service()
         if email_ser == None:

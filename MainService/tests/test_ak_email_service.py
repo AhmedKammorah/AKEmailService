@@ -2,7 +2,7 @@
 # @Author: Ahmed kammorah
 # @Date:   2019-04-06 11:30:47
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-06 14:14:53
+# @Last Modified time: 2019-04-06 14:23:49
 import unittest
 from MainService.main.ak_main_email_service import AKMainEmailService, EmailMessage
 
@@ -25,7 +25,7 @@ class TESTAKEmailService(unittest.TestCase):
 
     def setUp(self):
         print('setup')
-        self.ak_eamil_ser = AKEmailService()
+        self.ak_eamil_ser = AKMainEmailService()
         self.msg = EmailMessage(to_emails=MOCK_MESSAGE['to_emails'],from_email=MOCK_MESSAGE['from_email'],body=MOCK_MESSAGE['body'],subject=MOCK_MESSAGE['subject'])
         self.ser_sendgrid = self.ak_eamil_ser.services['sendgrid']
         self.ser_sparkpost = self.ak_eamil_ser.services['sparkpost']
