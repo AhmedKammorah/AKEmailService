@@ -1057,32 +1057,127 @@ body .markdown-body
 .codehilite .gc{color:#999;background-color:#EAF2F5}
 </style><title>Readme</title></head><body><article class="markdown-body"><h1 id="akemailservice">AKEmailService<a class="headerlink" href="#akemailservice" title="Permanent link"></a></h1>
 <p>Email Service</p>
-<p>Description of the problem and solution.
-Whether the solution focuses on back-end, front-end or if it&rsquo;s full stack.</p>
-<p>Reasoning behind your technical choices, including architectural.
-Trade-offs you might have made, anything you left out, or what you might do 
-differently if you were to spend additional time on the project.</p>
-<h1 id="the-problem">The Problem<a class="headerlink" href="#the-problem" title="Permanent link"></a></h1>
+<h1 id="the-problem-defention">The Problem Defention<a class="headerlink" href="#the-problem-defention" title="Permanent link"></a></h1>
+<p>Create a service that accepts the necessary information and sends emails. It should provide an abstraction between two different email service providers. If one of the services goes down, your service can quickly failover to a different provider without affecting your customers.</p>
+<div class="codehilite"><pre>Example Email Providers:
+    SendGrid - Simple Send Documentation
+    Mailgun - Simple Send Documentation
+    SparkPost - Developer Hub
+    Amazon SES - Simple Send Documentation
+</pre></div>
+
+
 <h1 id="the-solution">The Solution<a class="headerlink" href="#the-solution" title="Permanent link"></a></h1>
+<h2 id="clarifications">Clarifications<a class="headerlink" href="#clarifications" title="Permanent link"></a></h2>
+<p>Based on this requirement I can the goal is don&rsquo;t affect the customer by failover the provider to others when it goes down</p>
+<ul>
+<li>The Main Requirement here is to do the service<ul>
+<li>High Available </li>
+<li>High Reliability</li>
+</ul>
+</li>
+</ul>
+<h4 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link"></a></h4>
+<ul>
+<li>Who is the user of this service </li>
+<li>How the user interacts with the service </li>
+<li>What is the latency of sending email</li>
+<li>Should the service be synchronous or Asynchronous service</li>
+<li>Is there any priority of using email providers?</li>
+<li>What Happen when a provider goes down?<ul>
+<li>Failover to the other <ul>
+<li>what happens when old provider come back </li>
+<li>what happens when the new provider go down</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="simple-interface">Simple Interface<a class="headerlink" href="#simple-interface" title="Permanent link"></a></h4>
+<div class="codehilite"><pre>send_email(email_message)
+
+EmailMessage{
+    from_email:&quot;&quot;,
+    to_emails: [],
+    subject:&quot;&quot;
+    body:&quot;&lt;with html template or just text&gt;&quot;
+}
+</pre></div>
+
+<h4 id="trade-offs">Trade-offs<a class="headerlink" href="#trade-offs" title="Permanent link"></a></h4>
+<ol>
+<li>First Trade-off it the Synchronization of the service 
+    Two option Synchronous and Asynchronous service<ul>
+<li>Synchronous<ul>
+<li>User send action and take the response </li>
+<li>How much time user will wait until send email</li>
+<li>what happen when fail from using one provider and failover to other</li>
+</ul>
+</li>
+<li>Asynchronous <ul>
+<li>Send the event and go </li>
+<li>no proper response to the user on realtime </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Second How to over this service 
+    this is based on the type of user ant the type of scale and the services that will use it <ol>
+<li>Reast API</li>
+<li>RPC Endpoint with server/client</li>
+<li>Pub/sub Event based service </li>
+</ol>
+</li>
+</ol>
+<h4 id="service">Service<a class="headerlink" href="#service" title="Permanent link"></a></h4>
+<p>To make the Failover service that is send Email </p>
+<h3 id="main-sending-email-service">Main sending email service<a class="headerlink" href="#main-sending-email-service" title="Permanent link"></a></h3>
+<div class="codehilite"><pre>    register all providers to services List as services with its status
+    call send_email()
+        validate message
+        msg = build the EmailMessage 
+        provider = pick_provider_service()
+        if provider not exist:
+            no service is up
+            push to queue or storage for later send
+        res = provider.send(msg)
+        if res is Ok:
+            return Good and done 
+        if res is user related error(like bad email, or very big content):
+            back to user
+        if res is Reqest error(like bad Key, or request):
+            notify me on slack and log
+        if res is overLimt error:
+            mark service status as overlimt for now 
+        if res is provider related error:
+            mark provider service as DOWN
+            then 
+            recursively send_email()
+
+    pick_provider_service
+        for each provider service in the reigestered services
+            if status is up
+                return the service
+</pre></div>
+
+<h3 id="healthcheck-heart-beating-service">Healthcheck (heart beating) service<a class="headerlink" href="#healthcheck-heart-beating-service" title="Permanent link"></a></h3>
+<p>but with this algorithm, there is something that needs to be taken into consideration
+when service goes down, this algorithm will mark it and failover 
+but what happens when it comes back to be running 
+or when all services go down and no clue of its status 
+So I should keep track Healthcheck (heart beating) service for those providers 
+Its background service that is running periodacly with small intervals to check the status of the Email providers service (Without using the main APIs to not pay more for this requests or overlimit my limit on the provider)</p>
+<h3 id="redis">Redis<a class="headerlink" href="#redis" title="Permanent link"></a></h3>
+<p>To make this operate well, we need to store the status of the providers 
+produced by HealthCheck or the Main service itself and be very fast accessible from the sending email service 
+So I used Redis to be this kind of fast and small distributed cache</p>
 <div class="codehilite"><pre>Backend Service with it&#39;s API docs and clients
 </pre></div>
 
 
-<h2 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link"></a></h2>
-<ul>
-<li>Is there any periority of using the service ?</li>
-<li>What Happen when profider go down?<ul>
-<li>Failover to the other <ul>
-<li>what happen when old provider come back </li>
-<li>what happen when the new provider go down</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 <h2 id="high-level-architecture">High level architecture<a class="headerlink" href="#high-level-architecture" title="Permanent link"></a></h2>
 <p><img alt="High level architecture" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/static/AkEmailService-1.png" /></p>
-<p><img alt="Option 1" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/static/AkEmailService-4.png" /></p>
+<p><img alt="use case" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/static/AkEmailService-4.png" /></p>
 <h2 id="alternative">Alternative<a class="headerlink" href="#alternative" title="Permanent link"></a></h2>
 <p><img alt="Option 1" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/static/AkEmailService-2.png" />
 <img alt="Option 2" src="/Users/ahmedkammorah/Desktop/Self_study_Pro/jobs_tasks/Uber/AKEamilService-Uber/static/AkEmailService-3.png" /></p>
@@ -1230,6 +1325,15 @@ AK_API_JWT_SECRET_KEY=&lt;Choose SECRET Key to used to auth and generate JWT Tok
 </li>
 </ul>
 <h3 id="use-rpc-client">Use RPC client<a class="headerlink" href="#use-rpc-client" title="Permanent link"></a></h3>
+<p>If the the service that will use this service is 
+* Python 
+<div class="codehilite"><pre>    cd /app/MainService/rpc
+    cp ak_email_service_client.py     # with its depandancies 
+    if the other service is Python 
+</pre></div>
+* other language 
+Use the RPC stub to connecto to my RPC servicer </p>
+<p>RPC_SERVER :  13.58.165.80:50051</p>
 <h1 id="author">Author<a class="headerlink" href="#author" title="Permanent link"></a></h1>
 <ul>
 <li>Ahmed Kammroah <ul>

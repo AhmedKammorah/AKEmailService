@@ -2,34 +2,114 @@
 
 Email Service
 
+# The Problem Defention
+Create a service that accepts the necessary information and sends emails. It should provide an abstraction between two different email service providers. If one of the services goes down, your service can quickly failover to a different provider without affecting your customers.
 
-
-
-Description of the problem and solution.
-Whether the solution focuses on back-end, front-end or if it's full stack.
-
-Reasoning behind your technical choices, including architectural.
-Trade-offs you might have made, anything you left out, or what you might do 
-differently if you were to spend additional time on the project.
-
-
-
-# The Problem
+	Example Email Providers:
+		SendGrid - Simple Send Documentation
+		Mailgun - Simple Send Documentation
+		SparkPost - Developer Hub
+		Amazon SES - Simple Send Documentation
 
 # The Solution
-	Backend Service with it's API docs and clients 
-## Questions 
-* Is there any periority of using the service ?
-* What Happen when profider go down?
-	* Failover to the other 
-		* what happen when old provider come back 
-		* what happen when the new provider go down
 
+## Clarifications
+Based on this requirement I can the goal is don't affect the customer by failover the provider to others when it goes down
+
+* The Main Requirement here is to do the service
+    * High Available 
+    * High Reliability
+		
+#### Questions 
+* Who is the user of this service 
+* How the user interacts with the service 
+* What is the latency of sending email
+* Should the service be synchronous or Asynchronous service
+* Is there any priority of using email providers?
+* What Happen when a provider goes down?
+    * Failover to the other 
+        * what happens when old provider come back 
+        * what happens when the new provider go down
+
+#### Simple Interface 
+```
+send_email(email_message)
+
+EmailMessage{
+	from_email:"",
+	to_emails: [],
+	subject:""
+	body:"<with html template or just text>"
+}
+```
+#### Trade-offs
+1. First Trade-off it the Synchronization of the service 
+    Two option Synchronous and Asynchronous service
+    * Synchronous
+        * User send action and take the response 
+        * How much time user will wait until send email
+        * what happen when fail from using one provider and failover to other
+    * Asynchronous 
+    	* Send the event and go 
+    	* no proper response to the user on realtime 
+2. Second How to over this service 
+	this is based on the type of user ant the type of scale and the services that will use it 
+	1. Reast API
+	2. RPC Endpoint with server/client
+	3. Pub/sub Event based service 
+#### Service 
+To make the Failover service that is send Email 
+
+### Main sending email service
+```
+	register all providers to services List as services with its status
+    call send_email()
+        validate message
+        msg = build the EmailMessage 
+        provider = pick_provider_service()
+        if provider not exist:
+            no service is up
+            push to queue or storage for later send
+        res = provider.send(msg)
+        if res is Ok:
+            return Good and done 
+        if res is user related error(like bad email, or very big content):
+            back to user
+        if res is Reqest error(like bad Key, or request):
+            notify me on slack and log
+        if res is overLimt error:
+            mark service status as overlimt for now 
+        if res is provider related error:
+            mark provider service as DOWN
+            then 
+            recursively send_email()
+
+    pick_provider_service
+    	for each provider service in the reigestered services
+    		if status is up
+    			return the service
+
+```
+### Healthcheck (heart beating) service 
+but with this algorithm, there is something that needs to be taken into consideration
+when service goes down, this algorithm will mark it and failover 
+but what happens when it comes back to be running 
+or when all services go down and no clue of its status 
+So I should keep track Healthcheck (heart beating) service for those providers 
+Its background service that is running periodacly with small intervals to check the status of the Email providers service (Without using the main APIs to not pay more for this requests or overlimit my limit on the provider)
+
+### Redis 
+To make this operate well, we need to store the status of the providers 
+produced by HealthCheck or the Main service itself and be very fast accessible from the sending email service 
+So I used Redis to be this kind of fast and small distributed cache
+
+
+	Backend Service with it's API docs and clients 
 ## High level architecture
 
 ![High level architecture](static/AkEmailService-1.png)
 
-![Option 1](static/AkEmailService-4.png)
+![use case](static/AkEmailService-4.png)
 ## Alternative 
 ![Option 1](static/AkEmailService-2.png)
 ![Option 2](static/AkEmailService-3.png)
@@ -157,6 +237,18 @@ AK_API_JWT_SECRET_KEY=<Choose SECRET Key to used to auth and generate JWT Token>
 * Use the send Eamil endpoint
 	* [Send Email Endpoint /api/email [POST]](http://13.58.165.80:5000/apidocs/#/AKEmailServiceAPI/sendEmail)
 ### Use RPC client
+If the the service that will use this service is 
+* Python 
+```
+	cd /app/MainService/rpc
+	cp ak_email_service_client.py     # with its depandancies 
+	if the other service is Python 
+```
+* other language 
+Use the RPC stub to connecto to my RPC servicer 
+
+RPC_SERVER :  13.58.165.80:50051
+
 
 # Author
 * Ahmed Kammroah 
