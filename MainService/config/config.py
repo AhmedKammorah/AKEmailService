@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-05 13:06:43
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 18:29:32
+# @Last Modified time: 2019-04-14 23:56:19
 
 import os
 
@@ -24,9 +24,11 @@ AK_JWT_ALGORITHM = 'HS256'
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
 SPARKPOST_API_KEY = os.environ.get('SPARKPOST_API_KEY', None)
 
+PROD_REAL_API_SKIP = True
 if os.environ.get('AK_APP_ENV') == 'dev':
     BASE_HOST = 'localhost'
-
+    PROD_REAL_API_SKIP = False
+    
 import yaml
 current_dir = os.path.dirname(__file__)
 connector_config_file_name = 'conectors_conf.yaml'
@@ -41,3 +43,5 @@ conector_config = load_config(connector_config_path)
 conector_config.get('sendgrid')['API_KEY'] = SENDGRID_API_KEY
 conector_config.get('sparkpost')['API_KEY'] = SPARKPOST_API_KEY
 print(conector_config)
+
+

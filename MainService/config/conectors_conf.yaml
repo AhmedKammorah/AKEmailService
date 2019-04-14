@@ -4,10 +4,12 @@ appName: AKProviderConnectors
 logLevel: WARN
 
 sendgrid:
+    NAME: 'sendgrid'
     API_KEY: ""
     STATUS_URL: "http://status.sendgrid.com/api/v2/summary.json"
     COMPONENT_NAME: "Mail Sending" #"API v3"
 sparkpost:
+    NAME: 'sparkpost'
     API_KEY: ""
     STATUS_URL: "https://status.sparkpost.com/api/v2/summary.json"
     COMPONENT_NAME: "Transmissions API"

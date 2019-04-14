@@ -2,7 +2,7 @@
 # @Author: ahmedkammorah
 # @Date:   2019-04-04 11:24:11
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 23:02:04
+# @Last Modified time: 2019-04-15 00:16:49
 from MainService.main.email_provider_connector import EmailProviderConnector,RESPONSE_STATE, logger
 from sparkpost import SparkPost
 import requests
@@ -60,22 +60,6 @@ class EPSparkPostConnector(EmailProviderConnector):
             logger.error("Error in sending Email with SparkPost error:{}".format(e))
         return RESPONSE_STATE.OTHER_ERROR, None
 
-    def health_check(self):
-        """ Checking the health of the email conponent in sparkpost service """
-        url = self.config['STATUS_URL']
-        logger.info('Start heartbeat sparkpost service')
-        EMAIL_SERVICE_COMPONENT_NAME = self.config['COMPONENT_NAME']
-        print(EMAIL_SERVICE_COMPONENT_NAME)
-        response = requests.get(url)
-        if response.status_code >= 200 and response.status_code < 300:
-            ser_components = response.json().get('components', [])
-            comps = list(filter(lambda e: e.get('name', None) == EMAIL_SERVICE_COMPONENT_NAME, ser_components))
-            if len(comps) > 0:
-                comp = comps[0]
-                if comp.get('status', None) == 'operational':
-                    logger.info('heartbeat sparkpost service is Up and running')
-                    return True
-        return False
 
 
 if __name__ == "__main__":
