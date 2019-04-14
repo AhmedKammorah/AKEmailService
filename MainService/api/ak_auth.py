@@ -2,10 +2,10 @@
 # @Author: ahmedkammorah
 # @Date:   2017-01-21 23:51:34
 # @Last Modified by:   Ahmed kammorah
-# @Last Modified time: 2019-04-08 14:20:19
+# @Last Modified time: 2019-04-15 00:50:49
 
 '''
-    TS Custom JWT Auth 
+    My Custom JWT Auth 
     This work by JWT Config
     and API secrit  
 '''

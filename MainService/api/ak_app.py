@@ -9,9 +9,10 @@ from flasgger import Swagger, swag_from
 app = Flask(__name__)
 app.config['SWAGGER'] = {
     'title': 'AKEmailServices API',
-    'uiversion': 3
+    'uiversion': 3,
+    'host':DOCS_HOST
 }
-Swagger(app, template=Swagger_template)
+Swagger(app, template_file='swagger/docs_swagger.yml')
 
 CORS(app)
 
