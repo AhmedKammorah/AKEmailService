@@ -15,7 +15,7 @@ Jinja2==2.10
 jsonschema==3.0.1
 MarkupSafe==1.1.1
 mistune==0.8.4
-protobuf==3.7.1
+protobuf==3.18.3
 PyJWT==1.4.2
 pyrsistent==0.14.11
 python-http-client==3.1.0
